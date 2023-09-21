@@ -2,8 +2,6 @@ TOOLPREFIX = i686-elf-
 CC = $(TOOLPREFIX)gcc
 AS = $(TOOLPREFIX)as
 QEMU = qemu-system-i386
-NASM = nasm
-NASMFLAGS = -felf
 CFLAGS = -std=gnu99 -ffreestanding -I.
 LDFLAGS = -Tlinker.ld -ffreestanding -nostdlib -nostdinc
 
@@ -30,4 +28,4 @@ run:
 clean:
 	rm -f kernel/*.o kernel/arch/i386/*.o kernel.bin
 
-.PHONY run clean all
+.PHONY: run clean all

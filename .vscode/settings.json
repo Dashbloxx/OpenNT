@@ -1,0 +1,14 @@
+{
+    "files.exclude": {
+        "**/*.o": true
+    },
+    "files.associations": {
+        "main.h": "c",
+        "common.h": "c",
+        "stdlib.h": "c",
+        "system_error": "c",
+        "string.h": "c",
+        "rest.h": "c",
+        "functional": "c"
+    }
+}

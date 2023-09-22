@@ -7,9 +7,7 @@ LDFLAGS = -Tlinker.ld -ffreestanding -nostdlib -nostdinc
 
 SRCS := $(wildcard kernel/*.c)
 ASMS := $(wildcard kernel/*.S)
-ARCH_SRCS := $(wildcard kernel/arch/i386/*.c)
-ARCH_ASMS := $(wildcard kernel/arch/i386/*.S)
-OBJS := $(ASMS:.S=.o) $(SRCS:.c=.o) $(ARCH_ASMS:.S=.o) $(ARCH_SRCS:.c=.o)
+OBJS := $(ASMS:.S=.o) $(SRCS:.c=.o)
 
 all: kernel.bin
 

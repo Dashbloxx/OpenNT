@@ -1,6 +1,6 @@
 #include "serial.h"
 
-int main()
+void main()
 {
     /* Initialize COM1 serial port, and then print the character 'a' to COM1... */
     serial_initialize(COM1);

@@ -3,6 +3,7 @@
         "**/*.o": true
     },
     "files.associations": {
-        "string": "c"
+        "string": "c",
+        "stdint.h": "c"
     }
 }

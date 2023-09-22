@@ -1,8 +1,10 @@
 #include <stdarg.h>
+#include <stddef.h>
 
 #include "terminal.h"
 #include "serial.h"
 #include "string.h"
+#include "vga.h"
 
 terminal_t terminals[32];
 terminal_t * current_terminal;
@@ -12,9 +14,13 @@ terminal_t * current_terminal;
  */
 void terminal_initialize()
 {
+    serial_initialize(COM1);
+    vga_clear();
     terminals[0].read = &com1_read;
     terminals[0].write = &com1_write;
-    current_terminal = &terminals[0];
+    terminals[1].read = NULL;
+    terminals[1].write = &vga_write;
+    current_terminal = &terminals[1];
 }
 
 /**

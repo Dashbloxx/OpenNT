@@ -2,6 +2,7 @@
 
 #include "terminal.h"
 #include "serial.h"
+#include "string.h"
 
 terminal_t terminals[32];
 terminal_t * current_terminal;
@@ -51,11 +52,54 @@ void terminal_printf(terminal_t * terminal, const char * format, ...)
                     terminal_putc(terminal, c);
                     break;
                 case 's':
-                    char * string = va_arg(args, char *);
-                    while(*string != '\0')
+                    char * string0 = va_arg(args, char *);
+                    while(*string0 != '\0')
                     {
-                        terminal_putc(terminal, *string);
-                        string++;
+                        terminal_putc(terminal, *string0);
+                        string0++;
+                    }
+                    break;
+                case 'd':
+                    int num0 = va_arg(args, int);
+                    char buffer0[12];
+                    itoa(num0, buffer0, 10);
+                    char *string1 = buffer0;
+                    while(*string1 != '\0')
+                    {
+                        terminal_putc(terminal, *string1);
+                        string1++;
+                    }
+                    break;
+                case 'b':
+                    int num1 = va_arg(args, int);
+                    char buffer1[33];
+                    buffer1[32] = '\0';
+                    for(int i = 31; i >= 0; i--)
+                    {
+                        buffer1[i] = (num1 & 1) ? '1' : '0';
+                        num1 >>= 1;
+                    }
+                    char *string2 = buffer1;
+                    while (*string2 != '\0')
+                    {
+                        terminal_putc(terminal, *string2);
+                        string2++;
+                    }
+                    break;
+                case 'x':
+                    int num2 = va_arg(args, int);
+                    char buffer2[9];
+                    for(int i = 0; i < 8; i++)
+                    {
+                        int nibble = (num2 >> ((7 - i) * 4)) & 0xF;
+                        buffer2[i] = (nibble < 10) ? ('0' + nibble) : ('a' + nibble - 10);
+                    }
+                    buffer2[8] = '\0';
+                    char * string3 = buffer2;
+                    while(*string3 != '\0')
+                    {
+                        terminal_putc(terminal, *string3);
+                        string3++;
                     }
                     break;
                 default:

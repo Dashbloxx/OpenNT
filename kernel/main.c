@@ -3,13 +3,11 @@
 
 void main()
 {
+    /* Initialize terminal(s)... */
     terminal_initialize();
 
-    current_terminal->write('h');
-
-    /* Initialize COM1 serial port, and then print the character 'a' to COM1... */
-    serial_initialize(COM1);
-    serial_write(COM1, 'a');
+    /* Print some basic text... */
+    terminal_printf(current_terminal, "Hello, world!\r\n");
 
     while(1) { asm volatile("hlt"); }
 }

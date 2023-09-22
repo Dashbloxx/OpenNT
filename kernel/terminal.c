@@ -1,3 +1,5 @@
+#include <stdarg.h>
+
 #include "terminal.h"
 #include "serial.h"
 
@@ -27,3 +29,45 @@ void terminal_putc(terminal_t * terminal, char character) { terminal->write(char
  *  @return Returns the character that was inputted. 
  */
 char terminal_getchar(terminal_t * terminal) { return terminal->read(); }
+
+/**
+ *  @brief Print text into a terminal with format abilities.
+ *  @param terminal Which terminal to print to?
+ */
+void terminal_printf(terminal_t * terminal, const char * format, ...)
+{
+    va_list args;
+    va_start(args, format);
+
+    while (*format != '\0')
+    {
+        if (*format == '%')
+        {
+            format++;
+            switch(*format)
+            {
+                case 'c':
+                    char c = va_arg(args, int);
+                    terminal_putc(terminal, c);
+                    break;
+                case 's':
+                    char * string = va_arg(args, char *);
+                    while(*string != '\0')
+                    {
+                        terminal_putc(terminal, *string);
+                        string++;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            terminal_putc(terminal, *format);
+        }
+        format++;
+    }
+
+    va_end(args);
+}

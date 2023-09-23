@@ -1,8 +1,10 @@
 #include <stddef.h>
 
+#include "exception.h"
 #include "serial.h"
 #include "terminal.h"
 #include "multiboot.h"
+#include "idt.h"
 
 size_t installed_ram = 0;
 
@@ -15,12 +17,11 @@ void main(multiboot_t * multiboot)
      */
     installed_ram = ((multiboot->mem_lower * 1024) + (multiboot->mem_upper * 1024) - (1024 * 1024));
 
-    /* Let's also */
     /* Initialize terminal(s)... */
     terminal_initialize();
 
-    /* Print some basic text... */
-    terminal_printf(current_terminal, "Bootloader flags: \"%b\".\nBootloader name: \"%s\".\nCommand-line arguments: \"%s\".\nInstalled RAM: \"%x\".", multiboot->flags, multiboot->bootloader, multiboot->cmdline, installed_ram);
+    idt_initialize();
+    idt_register(0, IDT_TRAPGATE, &wrapper0);
 
     while(1) { asm volatile("hlt"); }
 }

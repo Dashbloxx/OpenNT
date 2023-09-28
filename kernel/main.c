@@ -8,6 +8,8 @@
 
 size_t installed_ram = 0;
 
+extern void wrapper0();
+
 void main(multiboot_t * multiboot)
 {
     /*
@@ -22,6 +24,8 @@ void main(multiboot_t * multiboot)
 
     idt_initialize();
     idt_register(0, IDT_TRAPGATE, &wrapper0);
+
+    int i = 123 / 0;
 
     while(1) { asm volatile("hlt"); }
 }

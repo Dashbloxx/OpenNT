@@ -1,14 +1,24 @@
 /*
- *  Here we define wrapper functions that later call the actual interrpt handler, since
- *  making them in plain C doesn't exactly work, and causes corruption.
+ *  Here we've got a macro that allows us to generate a small wrapper function that the CPU can call in order to alert us
+ *  that an exception occured.
  */
 
-.section .text
-.global wrapper0
+.macro EXCEPTION_HANDLER exception_number
+    .section .text
+    .global wrapper\exception_number
 
-wrapper0:
-    pusha
-    cld
-    call interrupt0
-    popa
-    iret
+    wrapper\exception_number:
+        pusha
+        cld
+        pushl $\exception_number
+        call exception_handler
+        popa
+        iret
+.endm
+
+/*
+ *  Here we just place a number following `EXCEPTION_HANDLER` for each exception interrupt that we can handle
+ *  (see kernel/exception.c).
+ */
+
+EXCEPTION_HANDLER 0

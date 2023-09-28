@@ -1,5 +1,3 @@
 #pragma once
 
-extern void wrapper0();
-
-void interrupt0();
+void exception_handler(int exception);

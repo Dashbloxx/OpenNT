@@ -11,16 +11,16 @@
 
 typedef struct
 {
-    uint16_t base_low;
-    uint16_t selector;
-    uint8_t reserved;
-    uint8_t flags;
-    uint16_t base_high;
+    uint16_t base_low : 16;
+    uint16_t selector : 16;
+    uint8_t reserved : 8;
+    uint8_t flags : 8;
+    uint16_t base_high : 16;
 } __attribute__((packed)) idt_t;
 
 typedef struct
 {
-    uint16_t limit;
+    uint16_t limit : 16;
     idt_t * base;
 } __attribute__((packed)) idt_pointer_t;
 

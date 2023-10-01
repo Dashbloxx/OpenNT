@@ -6,6 +6,8 @@
 #include "multiboot.h"
 #include "idt.h"
 #include "main.h"
+#include "port.h"
+#include "gdt.h"
 
 size_t installed_ram = 0;
 
@@ -44,6 +46,8 @@ extern void wrapper31();
 
 void main(multiboot_t * multiboot)
 {
+    gdt_initialize();
+
     /*
      *  Let's calculate the amount of installed RAM, in bytes.
      *  The bootloader only tells us the size in KiB, so therefore we must multiply mem_lower & mem_upper by 1024, and then subtract
@@ -88,10 +92,7 @@ void main(multiboot_t * multiboot)
     idt_register(30, IDT_TRAPGATE, &wrapper30);
     idt_register(31, IDT_TRAPGATE, &wrapper31);
 
-    int i = 0 / 2;
-    int j = 0;
-    j = i / 0;
-    i = j / 0;
+    terminal_printf(current_terminal, "Copyright (C) Reapiu (Dashbloxx), hexOS\r\nAll rights reserved.\r\n");
 
     HALT;
 }

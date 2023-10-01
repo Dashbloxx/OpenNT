@@ -3,9 +3,6 @@
         "**/*.o": true
     },
     "files.associations": {
-        "string": "c",
-        "stdint.h": "c",
-        "idt.h": "c",
-        "serial.h": "c"
+        "multiboot.h": "c"
     }
 }

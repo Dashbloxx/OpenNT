@@ -2,7 +2,7 @@ TOOLPREFIX = i686-elf-
 CC = $(TOOLPREFIX)gcc
 AS = $(TOOLPREFIX)as
 QEMU = qemu-system-i386
-CFLAGS = -std=gnu99 -ffreestanding -I.
+CFLAGS = -std=gnu99 -ffreestanding -I. -g
 LDFLAGS = -Tlinker.ld -ffreestanding -nostdlib -nostdinc
 
 SRCS := $(wildcard kernel/*.c)

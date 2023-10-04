@@ -1,7 +1,5 @@
 #pragma once
 
-#include "serial.h"
-
 typedef struct
 {
     char (* read)();

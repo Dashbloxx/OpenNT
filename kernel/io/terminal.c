@@ -2,9 +2,9 @@
 #include <stddef.h>
 
 #include "terminal.h"
-#include "serial.h"
-#include "string.h"
-#include "vga.h"
+#include "../drivers/serial/serial.h"
+#include "../utility/string.h"
+#include "../drivers/vga/vga.h"
 
 terminal_t terminals[32];
 terminal_t * current_terminal;

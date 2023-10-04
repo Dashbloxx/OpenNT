@@ -1,12 +1,12 @@
 #include <stddef.h>
 
-#include "exception.h"
-#include "serial.h"
-#include "terminal.h"
-#include "multiboot.h"
-#include "idt.h"
+#include "../interrupt/exception.h"
+#include "../drivers/serial/serial.h"
+#include "../io/terminal.h"
+#include "../utility/multiboot.h"
+#include "../interrupt/idt.h"
 #include "main.h"
-#include "port.h"
+#include "../io/port.h"
 #include "gdt.h"
 
 size_t installed_ram = 0;
@@ -92,7 +92,7 @@ void main(multiboot_t * multiboot)
     idt_register(30, IDT_TRAPGATE, &wrapper30);
     idt_register(31, IDT_TRAPGATE, &wrapper31);
 
-    terminal_printf(current_terminal, "Copyright (C) Reapiu (Dashbloxx), hexOS\r\nAll rights reserved.\r\n");
+    terminal_printf(current_terminal, "Copyright (C) Reapiu, hexOS.\r\nAll rights reserved.\r\n");
 
     HALT;
 }

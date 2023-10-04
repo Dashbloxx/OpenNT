@@ -1,7 +1,7 @@
 #include <stdint.h>
 
 #include "vga.h"
-#include "port.h"
+#include "../../io/port.h"
 
 uint16_t * vgabuffer = (uint16_t *)0xB8000;
 uint8_t cursor_x = 0, cursor_y = 0;

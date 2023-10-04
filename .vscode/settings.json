@@ -3,6 +3,7 @@
         "**/*.o": true
     },
     "files.associations": {
-        "multiboot.h": "c"
+        "multiboot.h": "c",
+        "terminal.h": "c"
     }
 }

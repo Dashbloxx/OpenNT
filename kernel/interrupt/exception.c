@@ -1,6 +1,6 @@
-#include "exception.h"
-#include "terminal.h"
-#include "main.h"
+#include "../interrupt/exception.h"
+#include "../io/terminal.h"
+#include "../general/main.h"
 
 char * exception_messages[32] = {
     "Division By Zero",

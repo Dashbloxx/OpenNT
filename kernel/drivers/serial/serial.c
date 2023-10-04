@@ -1,5 +1,5 @@
 #include "serial.h"
-#include "port.h"
+#include "../../io/port.h"
 
 /**
  *  @brief Initialize serial driver.

@@ -5,9 +5,9 @@ QEMU = qemu-system-i386
 CFLAGS = -std=gnu99 -ffreestanding -I. -g
 LDFLAGS = -Tlinker.ld -ffreestanding -nostdlib -nostdinc
 
-SRCS := $(wildcard kernel/*.c)
-ASMS := $(wildcard kernel/*.S)
-OBJS := $(ASMS:.S=.o) $(SRCS:.c=.o)
+SRCS := $(wildcard kernel/**/*.c)
+ASMS := $(wildcard kernel/**/*.S)
+OBJS := $(patsubst %.c,%.o,$(shell find kernel -name '*.S')) $(patsubst %.c,%.o,$(shell find kernel -name '*.c'))
 
 all: kernel.bin
 
@@ -24,6 +24,7 @@ run:
 	qemu-system-i386 -kernel kernel.bin -m 512M
 
 clean:
-	rm -f kernel/*.o kernel/arch/i386/*.o kernel.bin
+	find kernel -name "*.o" -type f -delete
+	rm -f kernel.bin
 
 .PHONY: run clean all

@@ -1,7 +1,7 @@
 #include <stdint.h>
 
 #include "idt.h"
-#include "port.h"
+#include "../io/port.h"
 
 /*
  *  Create an array of IDT entries, which contain the type of interrupt & the address to the

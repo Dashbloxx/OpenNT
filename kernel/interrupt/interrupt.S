@@ -1,55 +1,112 @@
-/*
- *  Here we've got a macro that allows us to generate a small wrapper function that the CPU can call in order to alert us
- *  that an exception occured.
- */
+.extern exception_handler
+.extern handle_irq
 
-.macro EXCEPTION_HANDLER exception_number
-    .section .text
-    .global wrapper\exception_number
-
-    wrapper\exception_number:
-        pusha
-        cld
-        pushl $\exception_number
-        call exception_handler
-        popa
-        iret
+.macro ISR_ERROR_CODE number
+    .global isr\number
+    
+    isr\number:
+        pushl $\number
+        jmp handle_isr_common
 .endm
 
-/*
- *  Here we just place a number following `EXCEPTION_HANDLER` for each exception interrupt that we can handle
- *  (see kernel/exception.c).
- */
+.macro ISR_NO_ERROR_CODE number
+    .global isr\number
 
-EXCEPTION_HANDLER 0
-EXCEPTION_HANDLER 1
-EXCEPTION_HANDLER 2
-EXCEPTION_HANDLER 3
-EXCEPTION_HANDLER 4
-EXCEPTION_HANDLER 5
-EXCEPTION_HANDLER 6
-EXCEPTION_HANDLER 7
-EXCEPTION_HANDLER 8
-EXCEPTION_HANDLER 9
-EXCEPTION_HANDLER 10
-EXCEPTION_HANDLER 11
-EXCEPTION_HANDLER 12
-EXCEPTION_HANDLER 13
-EXCEPTION_HANDLER 14
-EXCEPTION_HANDLER 15
-EXCEPTION_HANDLER 16
-EXCEPTION_HANDLER 17
-EXCEPTION_HANDLER 18
-EXCEPTION_HANDLER 19
-EXCEPTION_HANDLER 20
-EXCEPTION_HANDLER 21
-EXCEPTION_HANDLER 22
-EXCEPTION_HANDLER 23
-EXCEPTION_HANDLER 24
-EXCEPTION_HANDLER 25
-EXCEPTION_HANDLER 26
-EXCEPTION_HANDLER 27
-EXCEPTION_HANDLER 28
-EXCEPTION_HANDLER 29
-EXCEPTION_HANDLER 30
-EXCEPTION_HANDLER 31
+    isr\number:
+        pushl $0
+        pushl $\number
+        jmp handle_isr_common
+.endm
+
+.macro IRQ number vector
+    .global irq\number
+
+    irq\number:
+        pushl $0
+        pushl $\vector
+        jmp handle_irq_common
+.endm
+
+.macro STORE_REGISTERS
+    pushl %eax
+    pushl %ecx
+    pushl %edx
+    pushl %ebx
+    pushl %esp
+    pushl %ebp
+    pushl %esi
+    pushl %edi
+
+    pushl %ebx
+    movw $0x10, %bx
+    movw %bx, %ds
+    movw %bx, %es
+    movw %bx, %fs
+    movw %bx, %gs
+    popl %ebx
+.endm
+
+.macro RESTORE_REGISTERS
+    popl %edi
+    popl %esi
+    popl %ebp
+    popl %ebx
+    popl %edx
+    popl %ecx
+    popl %eax
+
+    popw %gs
+    popw %fs
+    popw %es
+    popw %ds
+    popal
+.endm
+
+IRQ 0, 32
+
+ISR_NO_ERROR_CODE 0
+ISR_NO_ERROR_CODE 1
+ISR_NO_ERROR_CODE 2
+ISR_NO_ERROR_CODE 3
+ISR_NO_ERROR_CODE 4
+ISR_NO_ERROR_CODE 5
+ISR_NO_ERROR_CODE 6
+ISR_NO_ERROR_CODE 7
+ISR_ERROR_CODE 8
+ISR_NO_ERROR_CODE 9
+ISR_ERROR_CODE 10
+ISR_ERROR_CODE 11
+ISR_ERROR_CODE 12
+ISR_ERROR_CODE 13
+ISR_ERROR_CODE 14
+ISR_NO_ERROR_CODE 15
+ISR_NO_ERROR_CODE 16
+ISR_ERROR_CODE 17
+ISR_NO_ERROR_CODE 18
+ISR_NO_ERROR_CODE 19
+ISR_NO_ERROR_CODE 20
+ISR_NO_ERROR_CODE 21
+ISR_NO_ERROR_CODE 22
+ISR_NO_ERROR_CODE 23
+ISR_NO_ERROR_CODE 24
+ISR_NO_ERROR_CODE 25
+ISR_NO_ERROR_CODE 26
+ISR_NO_ERROR_CODE 27
+ISR_NO_ERROR_CODE 28
+ISR_NO_ERROR_CODE 29
+ISR_ERROR_CODE 30
+ISR_NO_ERROR_CODE 31
+
+handle_isr_common:
+    STORE_REGISTERS
+    call exception_handler
+    RESTORE_REGISTERS
+    addl $8, %esp
+    iret
+
+handle_irq_common:
+    STORE_REGISTERS
+    call handle_irq
+    RESTORE_REGISTERS
+    addl $8, %esp
+    iret

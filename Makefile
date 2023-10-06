@@ -7,7 +7,7 @@ LDFLAGS = -Tlinker.ld -ffreestanding -nostdlib -nostdinc
 
 SRCS := $(wildcard kernel/**/*.c)
 ASMS := $(wildcard kernel/**/*.S)
-OBJS := $(patsubst %.c,%.o,$(shell find kernel -name '*.S')) $(patsubst %.c,%.o,$(shell find kernel -name '*.c'))
+OBJS := $(patsubst %.S,%.o,$(shell find kernel -name '*.S')) $(patsubst %.c,%.o,$(shell find kernel -name '*.c'))
 
 all: kernel.bin
 

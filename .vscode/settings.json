@@ -4,6 +4,9 @@
     },
     "files.associations": {
         "multiboot.h": "c",
-        "terminal.h": "c"
+        "terminal.h": "c",
+        "registers.h": "c",
+        "8259.h": "c",
+        "interrupt.h": "c"
     }
 }

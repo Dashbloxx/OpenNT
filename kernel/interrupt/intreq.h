@@ -2,4 +2,4 @@
 
 #include "../general/registers.h"
 
-void exception_handler(registers_t registers);
+void handle_irq(registers_t registers);

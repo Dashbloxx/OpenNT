@@ -106,15 +106,20 @@ void main(multiboot_t * multiboot)
     idt_register(31, IDT_TRAPGATE, &interrupt31);
     idt_register(32, IDT_INTGATE, &interrupt32);
 
-    pit_setfreq(1024);
+    /*
+     *  The minimum frequency for the PIT is 4Hz. We want things to tick slowly
+     *  so that we can tell what's going on. We don't need context switches to
+     *  happen that fast anyways, right?
+     */
+    pit_setfreq(4);
 
     ENABLE_INTERRUPTS;
 
     terminal_printf(current_terminal, "Copyright (C) Reapiu, hexOS.\r\nAll rights reserved.\r\n");
 
-    DISABLE_INTERRUPTS;
+    while(1);
 
-    while(1) {}
+    DISABLE_INTERRUPTS;
 
     HALT;
 }

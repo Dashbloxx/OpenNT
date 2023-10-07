@@ -1,6 +1,6 @@
 #include <stddef.h>
 
-#include "../interrupt/exception.h"
+#include "../interrupt/intser.h"
 #include "../drivers/serial/serial.h"
 #include "../io/terminal.h"
 #include "../utility/multiboot.h"
@@ -14,44 +14,43 @@
 
 size_t installed_ram = 0;
 
-extern void isr0();
-extern void isr1();
-extern void isr2();
-extern void isr3();
-extern void isr4();
-extern void isr5();
-extern void isr6();
-extern void isr7();
-extern void isr8();
-extern void isr9();
-extern void isr10();
-extern void isr11();
-extern void isr12();
-extern void isr13();
-extern void isr14();
-extern void isr15();
-extern void isr16();
-extern void isr17();
-extern void isr18();
-extern void isr19();
-extern void isr20();
-extern void isr21();
-extern void isr22();
-extern void isr23();
-extern void isr24();
-extern void isr25();
-extern void isr26();
-extern void isr27();
-extern void isr28();
-extern void isr29();
-extern void isr30();
-extern void isr31();
-
-extern void irq0();
+extern void interrupt0();
+extern void interrupt1();
+extern void interrupt2();
+extern void interrupt3();
+extern void interrupt4();
+extern void interrupt5();
+extern void interrupt6();
+extern void interrupt7();
+extern void interrupt8();
+extern void interrupt9();
+extern void interrupt10();
+extern void interrupt11();
+extern void interrupt12();
+extern void interrupt13();
+extern void interrupt14();
+extern void interrupt15();
+extern void interrupt16();
+extern void interrupt17();
+extern void interrupt18();
+extern void interrupt19();
+extern void interrupt20();
+extern void interrupt21();
+extern void interrupt22();
+extern void interrupt23();
+extern void interrupt24();
+extern void interrupt25();
+extern void interrupt26();
+extern void interrupt27();
+extern void interrupt28();
+extern void interrupt29();
+extern void interrupt30();
+extern void interrupt31();
+extern void interrupt32();
 
 void main(multiboot_t * multiboot)
 {
-    ENABLE_INTERRUPTS;
+    DISABLE_INTERRUPTS;
 
     /* Initialize the GDT (Global Descriptor Table). This should be one of the very first things we set up here. */
     gdt_initialize();
@@ -73,47 +72,49 @@ void main(multiboot_t * multiboot)
     pic8259_setup();
 
     /* Register exceptions to the IDT. */
-    idt_register(0, IDT_TRAPGATE, &isr0);
-    idt_register(1, IDT_TRAPGATE, &isr1);
-    idt_register(2, IDT_TRAPGATE, &isr2);
-    idt_register(3, IDT_TRAPGATE, &isr3);
-    idt_register(4, IDT_TRAPGATE, &isr4);
-    idt_register(5, IDT_TRAPGATE, &isr5);
-    idt_register(6, IDT_TRAPGATE, &isr6);
-    idt_register(7, IDT_TRAPGATE, &isr7);
-    idt_register(8, IDT_TRAPGATE, &isr8);
-    idt_register(9, IDT_TRAPGATE, &isr9);
-    idt_register(10, IDT_TRAPGATE, &isr10);
-    idt_register(11, IDT_TRAPGATE, &isr11);
-    idt_register(12, IDT_TRAPGATE, &isr12);
-    idt_register(13, IDT_TRAPGATE, &isr13);
-    idt_register(14, IDT_TRAPGATE, &isr14);
-    idt_register(15, IDT_TRAPGATE, &isr15);
-    idt_register(16, IDT_TRAPGATE, &isr16);
-    idt_register(17, IDT_TRAPGATE, &isr17);
-    idt_register(18, IDT_TRAPGATE, &isr18);
-    idt_register(19, IDT_TRAPGATE, &isr19);
-    idt_register(20, IDT_TRAPGATE, &isr20);
-    idt_register(21, IDT_TRAPGATE, &isr21);
-    idt_register(22, IDT_TRAPGATE, &isr22);
-    idt_register(23, IDT_TRAPGATE, &isr23);
-    idt_register(24, IDT_TRAPGATE, &isr24);
-    idt_register(25, IDT_TRAPGATE, &isr25);
-    idt_register(26, IDT_TRAPGATE, &isr26);
-    idt_register(27, IDT_TRAPGATE, &isr27);
-    idt_register(28, IDT_TRAPGATE, &isr28);
-    idt_register(29, IDT_TRAPGATE, &isr29);
-    idt_register(30, IDT_TRAPGATE, &isr30);
-    idt_register(31, IDT_TRAPGATE, &isr31);
-    idt_register(32, IDT_INTGATE, &irq0);
+    idt_register(0, IDT_TRAPGATE, &interrupt0);
+    idt_register(1, IDT_TRAPGATE, &interrupt1);
+    idt_register(2, IDT_TRAPGATE, &interrupt2);
+    idt_register(3, IDT_TRAPGATE, &interrupt3);
+    idt_register(4, IDT_TRAPGATE, &interrupt4);
+    idt_register(5, IDT_TRAPGATE, &interrupt5);
+    idt_register(6, IDT_TRAPGATE, &interrupt6);
+    idt_register(7, IDT_TRAPGATE, &interrupt7);
+    idt_register(8, IDT_TRAPGATE, &interrupt8);
+    idt_register(9, IDT_TRAPGATE, &interrupt9);
+    idt_register(10, IDT_TRAPGATE, &interrupt10);
+    idt_register(11, IDT_TRAPGATE, &interrupt11);
+    idt_register(12, IDT_TRAPGATE, &interrupt12);
+    idt_register(13, IDT_TRAPGATE, &interrupt13);
+    idt_register(14, IDT_TRAPGATE, &interrupt14);
+    idt_register(15, IDT_TRAPGATE, &interrupt15);
+    idt_register(16, IDT_TRAPGATE, &interrupt16);
+    idt_register(17, IDT_TRAPGATE, &interrupt17);
+    idt_register(18, IDT_TRAPGATE, &interrupt18);
+    idt_register(19, IDT_TRAPGATE, &interrupt19);
+    idt_register(20, IDT_TRAPGATE, &interrupt20);
+    idt_register(21, IDT_TRAPGATE, &interrupt21);
+    idt_register(22, IDT_TRAPGATE, &interrupt22);
+    idt_register(23, IDT_TRAPGATE, &interrupt23);
+    idt_register(24, IDT_TRAPGATE, &interrupt24);
+    idt_register(25, IDT_TRAPGATE, &interrupt25);
+    idt_register(26, IDT_TRAPGATE, &interrupt26);
+    idt_register(27, IDT_TRAPGATE, &interrupt27);
+    idt_register(28, IDT_TRAPGATE, &interrupt28);
+    idt_register(29, IDT_TRAPGATE, &interrupt29);
+    idt_register(30, IDT_TRAPGATE, &interrupt30);
+    idt_register(31, IDT_TRAPGATE, &interrupt31);
+    idt_register(32, IDT_INTGATE, &interrupt32);
 
-    pic8259_unmask(0);
-    
-    pit_setfreq(100);
+    pit_setfreq(1024);
+
+    ENABLE_INTERRUPTS;
 
     terminal_printf(current_terminal, "Copyright (C) Reapiu, hexOS.\r\nAll rights reserved.\r\n");
 
     DISABLE_INTERRUPTS;
+
+    while(1) {}
 
     HALT;
 }

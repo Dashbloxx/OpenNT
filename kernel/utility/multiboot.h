@@ -34,3 +34,22 @@ typedef struct
     uint16_t vbe_interface_off;
     uint16_t vbe_interface_len;
 } __attribute__((packed)) multiboot_t;
+
+typedef enum
+{
+    MMT_AVAILABLE = 1,
+    MMT_RESERVED,
+    MMT_ACPI_RECLAIMABLE,
+    MMT_NVS,
+    MMT_BADRAM
+} multiboot_memory_type_t;
+
+typedef struct
+{
+	uint32_t size;
+    uint32_t addr_low;
+    uint32_t addr_high;
+    uint32_t len_low;
+    uint32_t len_high;
+	multiboot_memory_type_t type;
+} multiboot_mmap_t;

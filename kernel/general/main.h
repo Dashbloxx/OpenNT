@@ -2,6 +2,8 @@
 
 #include <stddef.h>
 
-extern size_t installed_ram;
+#include "../memory/free.h"
+
+extern free_memory_t free_memory;
 
 #define HALT while(1) { asm volatile("hlt"); }

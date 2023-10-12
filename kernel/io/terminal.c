@@ -108,6 +108,17 @@ void terminal_printf(terminal_t * terminal, const char * format, ...)
                         string3++;
                     }
                     break;
+                case 'l':
+                    format++;
+                    if (*format == 'l' && *(format + 1) == 'x') {
+                        uint64_t num3 = va_arg(args, uint64_t);
+                        for (int i = 0; i < 16; i++) {
+                            int nibble = (num3 >> ((15 - i) * 4)) & 0xF;
+                            char hex_char = (nibble < 10) ? ('0' + nibble) : ('a' + nibble - 10);
+                            terminal_putc(terminal, hex_char);
+                        }
+                    }
+                    break;
                 default:
                     break;
             }

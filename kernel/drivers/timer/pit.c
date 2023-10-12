@@ -1,7 +1,7 @@
 #include <stdint.h>
 
-#include "../../interrupt/8259.h"
-#include "../../interrupt/idt.h"
+#include "../interrupt/8259.h"
+#include "../interrupt/idt.h"
 #include "../../io/port.h"
 #include "../../io/terminal.h"
 #include "../../general/registers.h"

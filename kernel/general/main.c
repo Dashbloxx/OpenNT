@@ -1,18 +1,31 @@
 #include <stddef.h>
 
-#include "../interrupt/intser.h"
+#include "../drivers/interrupt/intser.h"
 #include "../drivers/serial/serial.h"
 #include "../io/terminal.h"
 #include "../utility/multiboot.h"
-#include "../interrupt/idt.h"
+#include "../drivers/interrupt/idt.h"
 #include "main.h"
 #include "../io/port.h"
 #include "gdt.h"
-#include "../interrupt/8259.h"
+#include "../drivers/interrupt/8259.h"
 #include "../drivers/timer/pit.h"
-#include "../interrupt/interrupt.h"
+#include "../drivers/interrupt/interrupt.h"
+#include "../memory/physmem.h"
+#include "../memory/free.h"
 
-size_t installed_ram = 0;
+extern uint8_t __kernel_section_start;
+extern uint8_t __kernel_section_end;
+extern uint8_t __kernel_text_section_start;
+extern uint8_t __kernel_text_section_end;
+extern uint8_t __kernel_data_section_start;
+extern uint8_t __kernel_data_section_end;
+extern uint8_t __kernel_rodata_section_start;
+extern uint8_t __kernel_rodata_section_end;
+extern uint8_t __kernel_bss_section_start;
+extern uint8_t __kernel_bss_section_end;
+
+free_memory_t free_memory;
 
 extern void interrupt0();
 extern void interrupt1();
@@ -55,15 +68,28 @@ void main(multiboot_t * multiboot)
     /* Initialize the GDT (Global Descriptor Table). This should be one of the very first things we set up here. */
     gdt_initialize();
 
-    /*
-     *  Let's calculate the amount of installed RAM, in bytes.
-     *  The bootloader only tells us the size in KiB, so therefore we must multiply mem_lower & mem_upper by 1024, and then subtract
-     *  around 1 megabyte to make sure we don't accidentally try to interact with memory outside of existing bounds. 
-     */
-    installed_ram = ((multiboot->mem_lower * 1024) + (multiboot->mem_upper * 1024) - (1024 * 1024));
-
     /* Initialize terminal(s)... */
     terminal_initialize();
+
+    terminal_printf(current_terminal, "Searching for the right memory map...\r\n");
+    for(int i = 0; i < multiboot->mmap_length; i += sizeof(multiboot_mmap_t))
+    {
+        multiboot_mmap_t * mmap = (multiboot_mmap_t *)(multiboot->mmap_addr + i);
+        if(mmap->type != MMT_AVAILABLE)
+        {
+            terminal_printf(current_terminal, "Found memory map entry, but it's not about avaliable memory...\r\n");
+            continue;
+        }
+        if(mmap->addr_low == (uint32_t)&__kernel_text_section_start)
+        {
+            free_memory.start_address = (uint32_t)&__kernel_section_end + 1024 * 1024;
+            free_memory.end_address = mmap->addr_low + mmap->len_low;
+            free_memory.size = free_memory.end_address - free_memory.start_address;
+            terminal_printf(current_terminal, "Found available memory map entry!\r\nStart address of free memory: %x.\r\nEnd address of free memory: %x.\r\nSize of free memory: %x.\r\n", free_memory.start_address, free_memory.end_address, free_memory.size);
+        }
+    }
+
+    terminal_printf(current_terminal, "Finished scanning memory map entries!\r\nAmount of free RAM: %d!\r\n", free_memory.size);
 
     /* Initialize the IDT (Interrupt Descriptor Table)*/
     idt_initialize();
@@ -113,9 +139,9 @@ void main(multiboot_t * multiboot)
      */
     pit_setfreq(4);
 
-    ENABLE_INTERRUPTS;
+    physmem_initialize(free_memory.start_address, free_memory.size);
 
-    terminal_printf(current_terminal, "Copyright (C) Reapiu, hexOS.\r\nAll rights reserved.\r\n");
+    ENABLE_INTERRUPTS;
 
     while(1);
 

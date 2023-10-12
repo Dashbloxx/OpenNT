@@ -2,35 +2,48 @@ ENTRY(_start)
 
 SECTIONS
 {
-	. = 1M;
+    __kernel_section_start = .;
+    /* text section */
+    .text 0x0100000 : {
+        __kernel_text_section_start = .;
+        . = ALIGN(4);
+        /* set multiboot header */
+        LONG(0x1BADB002)
+        LONG(0x00000003)
+        LONG(0xE4524FFB)
+        code = .; _code = .; __code = .;
+        *(.text)
+        *(.rodata)
+        . = ALIGN(4096);
+        __kernel_text_section_end = .;
+    }
 
-	.text BLOCK(4K) : ALIGN(4K)
-	{
-        /*
-         *  Let's define some basic markers that tell us where the kernel starts & ends.
-         *  These include `start_of_kernel` as well as `end_of_kernel`.
-         */
-		start_of_kernel = .;
+    /* initialized data section */
+    .data : {
+        __kernel_data_section_start = .;
+        data = .; _data = .; __data = .;
+        *(.data)
+        . = ALIGN(4096);
+        __kernel_data_section_end = .;
+    }
 
-        /* Let's align the multiboot structure defined in arch/i386/boot.S here. */
-		*(.multiboot)
-		*(.text)
-	}
+    /* constant data section */
+    .rodata : {
+        __kernel_rodata_section_start = .;
+        *(.rodata)
+        __kernel_rodata_section_end = .;
+    }
 
-	.rodata BLOCK(4K) : ALIGN(4K)
-	{
-		*(.rodata)
-	}
+    /* un-initialized data section */
+    .bss : {
+        __kernel_bss_section_start = .;
+        bss = .; _bss = .; __bss = .;
+        *(.bss)
+        . = ALIGN(4096);
+        __kernel_bss_section_end = .;
+    }
 
-	.data BLOCK(4K) : ALIGN(4K)
-	{
-		*(.data)
-	}
-
-	.bss BLOCK(4K) : ALIGN(4K)
-	{
-		*(COMMON)
-		*(.bss)
-		end_of_kernel = .;
-	}
+    end = .; _end = .; __end = .;
+    __kernel_section_end = .;
 }
+

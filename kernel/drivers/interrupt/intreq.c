@@ -11,7 +11,7 @@ void handle_irq(registers_t registers)
     if(registers.interrupt == 32)
     {
         time++;
-        //terminal_printf(current_terminal, "%d\n", time);
+        terminal_printf(&terminals[0], "%d\r\n", time);
     }
     else
     {

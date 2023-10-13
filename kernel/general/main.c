@@ -13,6 +13,8 @@
 #include "../drivers/interrupt/interrupt.h"
 #include "../memory/physmem.h"
 #include "../memory/free.h"
+#include "../memory/virtmem.h"
+#include "../memory/paging.h"
 
 extern uint8_t __kernel_section_start;
 extern uint8_t __kernel_section_end;
@@ -71,13 +73,18 @@ void main(multiboot_t * multiboot)
     /* Initialize terminal(s)... */
     terminal_initialize();
 
+    /*
+     *  Loop for each multiboot memory map entry that is provided by the bootloader. Once
+     *  it finds the entry that represents the amount of free RAM that isn't occupied, set
+     *  the free_memory structure's values.
+     */
     terminal_printf(current_terminal, "Searching for the right memory map...\r\n");
     for(int i = 0; i < multiboot->mmap_length; i += sizeof(multiboot_mmap_t))
     {
         multiboot_mmap_t * mmap = (multiboot_mmap_t *)(multiboot->mmap_addr + i);
         if(mmap->type != MMT_AVAILABLE)
         {
-            terminal_printf(current_terminal, "Found memory map entry, but it's not about avaliable memory...\r\n");
+            /* Here we seem to find a memory map entry, but it isn't about free memory. */
             continue;
         }
         if(mmap->addr_low == (uint32_t)&__kernel_text_section_start)
@@ -89,6 +96,7 @@ void main(multiboot_t * multiboot)
         }
     }
 
+    /* Print out the amount of free RAM in the system. */
     terminal_printf(current_terminal, "Finished scanning memory map entries!\r\nAmount of free RAM: %d!\r\n", free_memory.size);
 
     /* Initialize the IDT (Interrupt Descriptor Table)*/
@@ -97,7 +105,7 @@ void main(multiboot_t * multiboot)
     /* Initialize the 8259 PIC. This allows us to specify when an interrupt has finished. */
     pic8259_setup();
 
-    /* Register exceptions to the IDT. */
+    /* Register exception interrupts to the IDT. */
     idt_register(0, IDT_TRAPGATE, &interrupt0);
     idt_register(1, IDT_TRAPGATE, &interrupt1);
     idt_register(2, IDT_TRAPGATE, &interrupt2);
@@ -130,6 +138,8 @@ void main(multiboot_t * multiboot)
     idt_register(29, IDT_TRAPGATE, &interrupt29);
     idt_register(30, IDT_TRAPGATE, &interrupt30);
     idt_register(31, IDT_TRAPGATE, &interrupt31);
+
+    /* Register PIT interrupt to the PIT. */
     idt_register(32, IDT_INTGATE, &interrupt32);
 
     /*
@@ -139,9 +149,28 @@ void main(multiboot_t * multiboot)
      */
     pit_setfreq(4);
 
+    /*
+     *  Initialize the physical memory manager, which allows us to allocate pages and
+     *  free them.
+     */
     physmem_initialize(free_memory.start_address, free_memory.size);
 
+    /* Print the amount of pages that can be possibly allocated. */
+    terminal_printf(current_terminal, "Max amount of pages that can be allocated: %d.\r\n", physmem_get_max_blocks());
+
+    /* Initialize a region which in this context is all of the available RAM. */
+    physmem_initialize_region(free_memory.start_address, PAGE_SIZE * physmem_get_max_blocks());
+
+    /* Initialize virtual memory. This is very useful for isolating contexts. */
+    virtmem_initialize();
+
     ENABLE_INTERRUPTS;
+
+    void * my_page = physmem_alloc_block();
+
+    terminal_printf(current_terminal, "I just allocated a single page!\r\nHere's it's address in memory: %x.\r\n", (uint32_t)my_page);
+
+    physmem_free_block(my_page);
 
     while(1);
 

@@ -24,6 +24,8 @@
         "slist": "c",
         "initializer_list": "c",
         "valarray": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "stdbool.h": "c",
+        "free.h": "c"
     }
 }

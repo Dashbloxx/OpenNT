@@ -3,7 +3,7 @@ CC = $(TOOLPREFIX)gcc
 AS = $(TOOLPREFIX)as
 QEMU = qemu-system-i386
 CFLAGS = -std=gnu99 -ffreestanding -I. -g
-LDFLAGS = -Tlinker.ld -ffreestanding -nostdlib -nostdinc
+LDFLAGS = -Tlinker.ld -ffreestanding -nostdlib -nostdinc -g
 
 SRCS := $(wildcard kernel/**/*.c)
 ASMS := $(wildcard kernel/**/*.S)
@@ -23,8 +23,11 @@ kernel.bin: $(OBJS)
 run:
 	qemu-system-i386 -kernel kernel.bin -m 512M
 
+debug:
+	qemu-system-i386 -s -S -kernel kernel.bin -m 512M
+
 clean:
 	find kernel -name "*.o" -type f -delete
 	rm -f kernel.bin
 
-.PHONY: run clean all
+.PHONY: run debug clean all

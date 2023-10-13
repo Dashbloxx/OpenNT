@@ -45,8 +45,19 @@ void handle_isr(registers_t registers)
     /* Let's make sure to disable interrupts & then call a halt loop! */
     DISABLE_INTERRUPTS;
 
-    /* Let's print the exception number! */
-    terminal_printf(current_terminal, "Exception triggered!\r\nException number: %d.\r\nException message: %s!\r\n", registers.interrupt, exception_messages[registers.interrupt]);
+    if(registers.interrupt == 14)
+    {
+        uint32_t fault_origin;
+        asm volatile("mov %%cr2, %0" : "=r"(fault_origin));
+
+        /* Let's print the exception number, and the faulting address!s */
+        terminal_printf(current_terminal, "Exception triggered!\r\nException number: %d.\r\nException message: %s!\r\nOrigin of page fault: %x.\r\n", registers.interrupt, exception_messages[registers.interrupt], fault_origin);
+    }
+    else
+    {
+        /* Let's print the exception number! */
+        terminal_printf(current_terminal, "Exception triggered!\r\nException number: %d.\r\nException message: %s!\r\n", registers.interrupt, exception_messages[registers.interrupt]);
+    }
 
     HALT;
 }

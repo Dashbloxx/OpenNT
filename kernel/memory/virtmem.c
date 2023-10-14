@@ -1,10 +1,11 @@
 #include <stdint.h>
 
+#include "physmem.h"
 #include "virtmem.h"
 #include "paging.h"
 
-uint32_t page_directory[1024] __attribute__((aligned(4096)));
-uint32_t first_page_table[1024] __attribute__((aligned(4096)));
+uint32_t page_directory[1024] __attribute__((aligned(PAGE_SIZE)));
+uint32_t first_page_table[1024] __attribute__((aligned(PAGE_SIZE)));
 
 void virtmem_initialize()
 {

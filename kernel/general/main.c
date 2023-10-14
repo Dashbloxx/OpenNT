@@ -15,6 +15,7 @@
 #include "../memory/free.h"
 #include "../memory/virtmem.h"
 #include "../memory/paging.h"
+#include "../context/thread.h"
 
 extern uint8_t __kernel_section_start;
 extern uint8_t __kernel_section_end;
@@ -162,9 +163,11 @@ void main(multiboot_t * multiboot)
     physmem_initialize_region(free_memory.start_address, PAGE_SIZE * physmem_get_max_blocks());
 
     /* Initialize virtual memory. This is very useful for isolating contexts. */
-    virtmem_initialize();
+    //virtmem_initialize();
 
     ENABLE_INTERRUPTS;
+
+    thread_initialize();
 
     void * my_page = physmem_alloc_block();
 
@@ -172,7 +175,9 @@ void main(multiboot_t * multiboot)
 
     physmem_free_block(my_page);
 
-    while(1);
+    terminal_printf(current_terminal, "EIP=%x, ESP=%x, EBP=%x.\r\n", kernel_thread.registers.eip, kernel_thread.registers.esp, kernel_thread.registers.ebp);
+
+    HANG;
 
     DISABLE_INTERRUPTS;
 

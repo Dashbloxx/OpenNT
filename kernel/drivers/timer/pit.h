@@ -8,4 +8,8 @@
 #define TIMER_CHANNEL_2_DATA_PORT 0x42
 #define TIMER_COMMAND_PORT 0x43
 
+/**
+ *  @brief Set the frequency of the PIT (Programmable Interval Timer).
+ *  @param freq The frequency in Hz (How many triggers per second?).
+ */
 void pit_setfreq(uint16_t freq);

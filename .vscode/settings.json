@@ -27,6 +27,7 @@
         "string.h": "c",
         "stdbool.h": "c",
         "free.h": "c",
-        "virtmem.h": "c"
+        "virtmem.h": "c",
+        "stdint.h": "c"
     }
 }

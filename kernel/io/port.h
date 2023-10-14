@@ -2,16 +2,21 @@
 
 #include <stdint.h>
 
-/*
- *  These are wrapper functions for the instructions inb, inw, inl, outb, outw, and outl. They
- *  are useful for communicating with hardware easily, such as with serial ports.
+/**
+ *  @brief A wrapper function for the `outb` instruction.
+ *  @param port Where are we sending the byte to?
+ *  @param data What's the byte that we're sending?
  */
-
 static inline void outb(unsigned int port, uint8_t data)
 {
     asm volatile("outb %b0, %w1" : : "a" (data), "Nd" (port));
 }
 
+/**
+ *  @brief A wrapper function for the `inb` instruction.
+ *  @param port From where should we be recieving from?
+ *  @return The byte that `inb` recieves.
+ */
 static inline uint8_t inb(unsigned int port)
 {
     uint8_t data;
@@ -19,11 +24,21 @@ static inline uint8_t inb(unsigned int port)
     return data;
 }
 
+/**
+ *  @brief A wrapper function for the `outw` instruction.
+ *  @param port Where are we sending the word to?
+ *  @param data What's the word that we're sending?
+ */
 static inline void outw(unsigned int port, uint16_t data)
 {
     asm volatile("outw %w0, %w1" : : "a" (data), "Nd" (port));
 }
 
+/**
+ *  @brief A wrapper function for the `inw` instruction.
+ *  @param port From where should we be recieving from?
+ *  @return The word that `inw` recieves.
+ */
 static inline uint16_t inw(unsigned int port)
 {
     uint16_t data;
@@ -31,11 +46,21 @@ static inline uint16_t inw(unsigned int port)
     return data;
 }
 
+/**
+ *  @brief A wrapper function for the `outl` instruction.
+ *  @param port Where are we sending the long to?
+ *  @param data What's the long that we're sending?
+ */
 static inline void outl(unsigned int port, uint32_t data)
 {
     asm volatile("outl %0, %w1" : : "a" (data), "Nd" (port));
 }
 
+/**
+ *  @brief A wrapper function for the `inw` instruction.
+ *  @param port From where should we be recieving from?
+ *  @return The long that `inw` recieves.
+ */
 static inline uint32_t inl(unsigned int port)
 {
     uint32_t data;
@@ -43,6 +68,7 @@ static inline uint32_t inl(unsigned int port)
     return data;
 }
 
+/** @brief Wait a single instruction. */
 static inline void io_wait()
 {
     outb(0x80, 0);

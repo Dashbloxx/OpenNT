@@ -3,6 +3,7 @@
 #include "../../io/port.h"
 #include "../../io/terminal.h"
 #include "8259.h"
+#include "../../context/thread.h"
 
 uint32_t time = 0;
 
@@ -12,6 +13,7 @@ void handle_irq(registers_t registers)
     {
         time++;
         terminal_printf(&terminals[0], "%d\r\n", time);
+        context_switch(current_thread, current_thread->next_thread);
     }
     else
     {

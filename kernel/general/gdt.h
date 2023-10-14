@@ -31,6 +31,8 @@ typedef struct
 } __attribute__((packed)) tss_t;
 
 void gdt_register(unsigned int idx, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags);
+
+/** @brief Initialize the GDT (Global Descriptor Table). */
 void gdt_initialize();
 
 extern tss_t tss;

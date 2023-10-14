@@ -165,17 +165,16 @@ void main(multiboot_t * multiboot)
     /* Initialize virtual memory. This is very useful for isolating contexts. */
     //virtmem_initialize();
 
-    ENABLE_INTERRUPTS;
-
+    /* Create a thread that represents the kernel. */
     thread_initialize();
+
+    ENABLE_INTERRUPTS;
 
     void * my_page = physmem_alloc_block();
 
     terminal_printf(current_terminal, "I just allocated a single page!\r\nHere's it's address in memory: %x.\r\n", (uint32_t)my_page);
 
     physmem_free_block(my_page);
-
-    terminal_printf(current_terminal, "EIP=%x, ESP=%x, EBP=%x.\r\n", kernel_thread.registers.eip, kernel_thread.registers.esp, kernel_thread.registers.ebp);
 
     HANG;
 

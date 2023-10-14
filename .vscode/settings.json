@@ -28,6 +28,7 @@
         "stdbool.h": "c",
         "free.h": "c",
         "virtmem.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "gdt.h": "c"
     }
 }

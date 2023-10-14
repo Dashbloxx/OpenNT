@@ -13,7 +13,6 @@ void handle_irq(registers_t registers)
     {
         time++;
         terminal_printf(&terminals[0], "%d\r\n", time);
-        context_switch(current_thread, current_thread->next_thread);
     }
     else
     {

@@ -1,3 +1,3 @@
 # OpenNT
 ## About
-Although this project was a plan to create a UNIX-like operating system, I've shifted my goal to create a NT-like kernel, for i386 processors. It's mostly for learning purposes, and I believe that I have gotten bored of wanting to write UNIX-like kernels, therefore (like I said) I plan on making this a kernel similar to the kernel behind Microsoft Windows.
+OpenNT is a small kernel that runs on `i386` machines. It's purpose is to be a kernel with the goal of being as similar and compatible with as official NT kernel. It's currently being written by me for research purposes, but soon I may release it under an open-source license.

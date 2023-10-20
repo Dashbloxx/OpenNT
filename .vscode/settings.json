@@ -1,34 +1,11 @@
 {
-    "files.exclude": {
-        "**/*.o": true
-    },
-    "files.associations": {
-        "multiboot.h": "c",
-        "terminal.h": "c",
-        "registers.h": "c",
-        "8259.h": "c",
-        "interrupt.h": "c",
-        "intreq.h": "c",
-        "page.h": "c",
-        "array": "c",
-        "deque": "c",
-        "forward_list": "c",
-        "list": "c",
-        "string": "c",
-        "unordered_map": "c",
-        "unordered_set": "c",
-        "vector": "c",
-        "string_view": "c",
-        "hash_map": "c",
-        "hash_set": "c",
-        "slist": "c",
-        "initializer_list": "c",
-        "valarray": "c",
-        "string.h": "c",
-        "stdbool.h": "c",
-        "free.h": "c",
-        "virtmem.h": "c",
-        "stdint.h": "c",
-        "gdt.h": "c"
-    }
+	"files.exclude": {
+		"**/*.o": true
+	},
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"editor.tabSize": 4,
+	"editor.trimAutoWhitespace": true,
+	"editor.renderWhitespace": "boundary",
+	"editor.renderControlCharacters": true
 }

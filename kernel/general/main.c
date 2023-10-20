@@ -163,7 +163,7 @@ void main(multiboot_t * multiboot)
     physmem_initialize_region(free_memory.start_address, PAGE_SIZE * physmem_get_max_blocks());
 
     /* Initialize virtual memory. This is very useful for isolating contexts. */
-    //virtmem_initialize();
+    virtmem_initialize();
 
     /* Create a thread that represents the kernel. */
     thread_initialize();

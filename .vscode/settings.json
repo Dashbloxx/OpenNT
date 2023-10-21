@@ -7,5 +7,28 @@
 	"editor.tabSize": 4,
 	"editor.trimAutoWhitespace": true,
 	"editor.renderWhitespace": "boundary",
-	"editor.renderControlCharacters": true
+	"editor.renderControlCharacters": true,
+	"files.associations": {
+		"atomic": "c",
+		"*.tcc": "c",
+		"cmath": "c",
+		"compare": "c",
+		"functional": "c",
+		"iterator": "c",
+		"string_view": "c",
+		"algorithm": "c",
+		"random": "c",
+		"limits": "c",
+		"numeric": "c",
+		"ostream": "c",
+		"ratio": "c",
+		"stop_token": "c",
+		"streambuf": "c",
+		"tuple": "c",
+		"type_traits": "c",
+		"typeinfo": "c",
+		"*.inc": "c",
+		"bounds.h": "c",
+		"terminal.h": "c"
+	}
 }

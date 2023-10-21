@@ -16,17 +16,7 @@
 #include "../memory/virtmem.h"
 #include "../memory/paging.h"
 #include "../context/thread.h"
-
-extern uint8_t __kernel_section_start;
-extern uint8_t __kernel_section_end;
-extern uint8_t __kernel_text_section_start;
-extern uint8_t __kernel_text_section_end;
-extern uint8_t __kernel_data_section_start;
-extern uint8_t __kernel_data_section_end;
-extern uint8_t __kernel_rodata_section_start;
-extern uint8_t __kernel_rodata_section_end;
-extern uint8_t __kernel_bss_section_start;
-extern uint8_t __kernel_bss_section_end;
+#include "bounds.h"
 
 free_memory_t free_memory;
 

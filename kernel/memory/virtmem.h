@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdbool.h>
 
 /*
  *  Make it easier to distinguish whether we're working with physical addresses
@@ -8,6 +9,7 @@
  */
 typedef uint32_t physaddr_t;
 typedef uint32_t virtaddr_t;
+typedef uint32_t unknaddr_t;
 
 static inline uint32_t page_directory_index(virtaddr_t virtaddr)
 {
